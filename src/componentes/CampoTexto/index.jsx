@@ -6,6 +6,7 @@ const ContainerEstilizado = styled.div`
     display: inline-block;
 `;
 
+
 const CampoTextoEstilizado = styled.input`
     height: 56px;
     padding: 12px 16px;
@@ -20,10 +21,11 @@ const CampoTextoEstilizado = styled.input`
     font-size: 20px;
     line-height: 20px;
 `
+
 const IconeLupa = styled.img`
     position: absolute;
     top: 10px;
-    right: 40px;
+    right: 10px;
     width: 38px;
     height: 38px;
 `;
@@ -31,7 +33,7 @@ const IconeLupa = styled.img`
 const CampoTexto = (props) => {
     return (
         <ContainerEstilizado>
-            <CampoTextoEstilizado placeholder="O que você procura?" {...props} />
+            <CampoTextoEstilizado {...props} />
             <IconeLupa src={search} alt="ícone de lupa" />
         </ContainerEstilizado>
     )
