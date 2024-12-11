@@ -7,8 +7,9 @@ import bannerBackground from './assets/banner.png'
 import Galeria from "./componentes/Galeria"
 
 import fotos from './fotos.json'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ModalZoom from "./componentes/ModalZoom"
+import CampoTexto from "./componentes/CampoTexto"
 
 const FundoGradiente = styled.div`
   background: linear-gradient(174.61deg, #041833 4.16%, #04244F 48%, #154580 96.76%);
@@ -36,6 +37,18 @@ const ConteudoGaleria = styled.section`
 const App = () => {
   const [fotosDaGaleria, setFotosDaGaleria] = useState(fotos)
   const [fotoSelecionada, setFotoSelecionada] = useState(null)
+  const [busca, setBusca] = useState(""); // Termo de busca
+
+  useEffect(() => {
+    const termo = busca.toLowerCase().trim();
+    const fotosFiltradas = fotos.filter(
+      (foto) =>
+        foto.titulo.toLowerCase().includes(termo) || // Filtra por título
+        (termo && !isNaN(termo) && foto.tagId === parseInt(termo)) // Filtra por tagId
+    );
+    setFotosDaGaleria(fotosFiltradas.length > 0 ? fotosFiltradas : fotos);
+  }, [busca]);
+  
 
   const aoAlternarFavorito = (foto) => {
     if (foto.id === fotoSelecionada?.id) {
@@ -57,7 +70,13 @@ const App = () => {
     <FundoGradiente>
       <EstilosGlobais />
       <AppContainer>
+        
         <Cabecalho />
+        <CampoTexto
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Buscar por título ou tag..."
+            />
         <MainContainer>
           <BarraLateral />
           <ConteudoGaleria>
