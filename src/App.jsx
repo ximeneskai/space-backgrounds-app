@@ -9,6 +9,7 @@ import Galeria from "./componentes/Galeria"
 import fotos from './fotos.json'
 import { useState } from "react"
 import ModalZoom from "./componentes/ModalZoom"
+import Rodape from "./componentes/Rodapé"
 
 
 const FundoGradiente = styled.div`
@@ -115,7 +116,9 @@ const App = () => {
             />
           </ConteudoGaleria>
         </MainContainer>
+        
       </AppContainer>
+      <Rodape />
       <ModalZoom 
         foto={fotoSelecionada}
         aoFechar={() => setFotoSelecionada(null)}
