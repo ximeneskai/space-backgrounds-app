@@ -10,10 +10,15 @@ const HeaderEstilizado = styled.header`
     }
 `
 
-const Cabecalho = () => {
+const Cabecalho = ({busca, onSearchChange, onSearchClick}) => {
     return (<HeaderEstilizado>
         <img src="/imagens/logo.png" alt="" />
-        <CampoTexto/>
+        <CampoTexto
+            value={busca}
+            onChange={(e) => onSearchChange(e.target.value)}
+            onClick={onSearchClick}
+            placeholder="Buscar por título ou tag..."
+        />
     </HeaderEstilizado>)
 }
 

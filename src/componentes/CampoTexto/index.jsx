@@ -30,15 +30,15 @@ const IconeLupa = styled.img`
     height: 38px;
 `;
 
-const CampoTexto = ({ value, onChange, placeholder }) => {
+const CampoTexto = ({ value, onChange, onClick, ...props }) => {
     return (
         <ContainerEstilizado>
             <CampoTextoEstilizado 
                 value={value}
                 onChange={onChange}
-                placeholder={placeholder}
+                {...props}
             />
-            <IconeLupa src={search} alt="ícone de lupa" />
+            <IconeLupa src={search} alt="ícone de lupa" onClick={onClick} />
         </ContainerEstilizado>
     )
 }

@@ -7,9 +7,9 @@ import bannerBackground from './assets/banner.png'
 import Galeria from "./componentes/Galeria"
 
 import fotos from './fotos.json'
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import ModalZoom from "./componentes/ModalZoom"
-import CampoTexto from "./componentes/CampoTexto"
+
 
 const FundoGradiente = styled.div`
   background: linear-gradient(174.61deg, #041833 4.16%, #04244F 48%, #154580 96.76%);
@@ -35,35 +35,48 @@ const ConteudoGaleria = styled.section`
 `
 
 const App = () => {
+  const [fotosOriginais, setFotosOriginais] = useState(fotos)
   const [fotosDaGaleria, setFotosDaGaleria] = useState(fotos)
   const [fotoSelecionada, setFotoSelecionada] = useState(null)
-  const [busca, setBusca] = useState(""); // Termo de busca
-
-  useEffect(() => {
-    const termo = busca.toLowerCase().trim();
-    const fotosFiltradas = fotos.filter(
-      (foto) =>
-        foto.titulo.toLowerCase().includes(termo) || // Filtra por título
-        (termo && !isNaN(termo) && foto.tagId === parseInt(termo)) // Filtra por tagId
-    );
-    setFotosDaGaleria(fotosFiltradas.length > 0 ? fotosFiltradas : fotos);
-  }, [busca]);
-  
+  const [busca, setBusca] = useState(""); 
 
   const aoAlternarFavorito = (foto) => {
-    if (foto.id === fotoSelecionada?.id) {
-      setFotoSelecionada({
-        ...fotoSelecionada,
-        favorita: !fotoSelecionada.favorita
-      })
-    }
-    setFotosDaGaleria(fotosDaGaleria.map(fotoDaGaleria => {
-      return {
-        ...fotoDaGaleria,
-        favorita: fotoDaGaleria.id === foto.id ? !foto.favorita : fotoDaGaleria.favorita
+
+    const fotosAtualizadas = fotosOriginais.map((fotoOriginal) => {
+      if (fotoOriginal.id === foto.id) {
+        return {...fotoOriginal, favorita: !foto.favorita};
       }
-    }))
+      return fotoOriginal;
+    });
     
+    setFotosOriginais(fotosAtualizadas);
+
+    const fotosFiltradasAtualizadas = fotosDaGaleria.map((fotoDaGaleria) => {
+      if (fotoDaGaleria.id === foto.id) {
+        return { ...fotoDaGaleria, favorita: !foto.favorita};
+      }
+      return fotoDaGaleria;
+    })
+
+    setFotosDaGaleria(fotosFiltradasAtualizadas);
+    
+  }
+
+  const pesquisarFotos = () => {
+    const pesquisa = busca.toLowerCase().trim();
+
+    if(!pesquisa) {
+      setFotosDaGaleria(fotosOriginais);
+      return;
+    }
+
+    const fotosFiltradas = fotosOriginais.filter(
+      (foto) => 
+        foto.titulo.toLowerCase().includes(pesquisa) ||
+        (!isNaN(pesquisa) && foto.tagId === parseInt(pesquisa))
+    );
+
+    setFotosDaGaleria(fotosFiltradas);
   }
   
   return (
@@ -71,12 +84,11 @@ const App = () => {
       <EstilosGlobais />
       <AppContainer>
         
-        <Cabecalho />
-        <CampoTexto
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por título ou tag..."
-            />
+        <Cabecalho
+          busca={busca} 
+          onSearchChange={setBusca} 
+          onSearchClick={pesquisarFotos}
+        />
         <MainContainer>
           <BarraLateral />
           <ConteudoGaleria>
