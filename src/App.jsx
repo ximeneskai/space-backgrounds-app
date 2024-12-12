@@ -62,6 +62,17 @@ const App = () => {
     
   }
 
+  const filtrarPorTag = (tagId) => {
+    if (tagId === 0) {
+      setFotosDaGaleria(fotosOriginais);
+      return
+    }
+
+    const fotosFiltradas = fotosOriginais.filter(
+      (foto) => foto.tagId === tagId);
+      setFotosDaGaleria(fotosFiltradas);
+  }
+
   const pesquisarFotos = () => {
     const pesquisa = busca.toLowerCase().trim();
 
@@ -100,6 +111,7 @@ const App = () => {
               aoFotoSelecionada={foto => setFotoSelecionada(foto)}
               aoAlternarFavorito={aoAlternarFavorito} 
               fotos={fotosDaGaleria}
+              onTagClick={filtrarPorTag}
             />
           </ConteudoGaleria>
         </MainContainer>
